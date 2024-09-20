@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Excel-Like Table with Bootstrap</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* Custom styles to make the table look more like Excel */
+        table input {
+            width: 100%;
+            border: none;
+            padding: 8px;
+            background-color: transparent;
+        }
+
+        table input:focus {
+            outline: 2px solid #007bff;
+            background-color: #f8f9fa;
+        }
+
+        th {
+            background-color: #f1f1f1;
+            text-align: center;
+            font-weight: bold;
+        }
+		td input {
+			text-align: center;
+		}
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h2 class="mb-4">Excel-Like Editable Table</h2>
+        
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="thead-light">
+                    <tr>
+                        <th>Column A</th>
+                        <th>Column B</th>
+                        <th>Column C</th>
+                        <th>Column D</th>
+                        <th>Column E</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                    </tr>
+                    <tr>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                        <td><input type="password" value="" class="data-cell-values"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+    // Function to handle long right-click and change input type
+    document.querySelectorAll('input[type="password"]').forEach(input => {
+        let rightClickTimeout;
+
+        // Detect right-click and hold
+        input.addEventListener('contextmenu', (e) => {
+            e.preventDefault(); // Prevent context menu from showing up
+            input.type = 'text';
+        });
+
+        // Revert to 'password' when the right-click is released
+        input.addEventListener('mouseup', () => {
+            clearTimeout(rightClickTimeout); // Cancel long press if released early
+            input.type = 'password'; // Revert back to 'password' when mouse button is released
+        });
+
+        // Ensure input reverts to 'password' when the right-click is released outside of the input
+        window.addEventListener('mouseup', () => {
+            if (input.type === 'text') {
+                input.type = 'password';
+            }
+        });
+    });
+
+    // Function to validate input values (only 2 digits and up to 2 decimal places)
+    function validateInput(input) {
+        // Allow only numbers and one decimal point
+        input.value = input.value.replace(/[^0-9.]/g, '');
+
+        // Ensure only one decimal point is allowed
+        if (input.value.indexOf('.') !== input.value.lastIndexOf('.')) {
+            input.value = input.value.slice(0, -1);
+        }
+
+        // Limit the value to two digits before and two decimals after the point
+        const regex = /^\d{0,2}(\.\d{0,2})?$/;
+        if (!regex.test(input.value)) {
+            input.value = input.value.slice(0, -1);
+        }
+    }
+
+    // Attach input event listeners to all elements with the class 'data-cell-values'
+    var dataCellValues = document.querySelectorAll('.data-cell-values');
+    dataCellValues.forEach(function(dataCellValue) {
+        dataCellValue.addEventListener('input', function () {
+            validateInput(dataCellValue);
+        });
+    });
+</script>
+
+</body>
+</html>
